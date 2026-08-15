@@ -1,460 +1,456 @@
 document.addEventListener("DOMContentLoaded", () => {
 
+    /* ==========================
+       ELEMENT REFERENCES
+    ========================== */
 
-/* ==========================
-   THEME TOGGLE
-========================== */
-
-
-const body = document.body;
-const themeBtn = document.getElementById("theme-toggle");
-
-
-const savedTheme = localStorage.getItem("theme");
-
-
-if(savedTheme === "light"){
-
-    body.classList.add("light-mode");
-
-    themeBtn.innerHTML =
-    '<i class="fa-solid fa-sun"></i>';
-
-}
+    const body = document.body;
+    const themeBtn = document.getElementById("theme-toggle");
+    const menuBtn = document.querySelector(".mobile-nav-toggle");
+    const navLinks = document.querySelector(".nav-links");
+    const typingElement = document.querySelector(".hero h2");
+    const navbar = document.querySelector(".navbar");
+    const footer = document.querySelector("footer p");
 
 
+    /* ==========================
+       THEME TOGGLE
+    ========================== */
 
+    const savedTheme = localStorage.getItem("theme");
 
-themeBtn.addEventListener("click",()=>{
+    if (savedTheme === "light") {
 
+        body.classList.add("light-mode");
 
-    body.classList.toggle("light-mode");
+        if (themeBtn) {
+            themeBtn.innerHTML =
+                '<i class="fa-solid fa-sun"></i>';
 
+            themeBtn.setAttribute(
+                "aria-label",
+                "Switch to dark mode"
+            );
+        }
 
-    if(body.classList.contains("light-mode")){
+    } else {
 
+        body.classList.remove("light-mode");
 
-        localStorage.setItem(
-            "theme",
-            "light"
-        );
+        if (themeBtn) {
+            themeBtn.innerHTML =
+                '<i class="fa-solid fa-moon"></i>';
 
-
-        themeBtn.innerHTML =
-        '<i class="fa-solid fa-sun"></i>';
-
-    }
-    else{
-
-
-        localStorage.setItem(
-            "theme",
-            "dark"
-        );
-
-
-        themeBtn.innerHTML =
-        '<i class="fa-solid fa-moon"></i>';
+            themeBtn.setAttribute(
+                "aria-label",
+                "Switch to light mode"
+            );
+        }
 
     }
 
 
-});
+    if (themeBtn) {
 
+        themeBtn.addEventListener("click", () => {
 
+            body.classList.toggle("light-mode");
 
+            const isLightMode =
+                body.classList.contains("light-mode");
 
 
+            if (isLightMode) {
 
+                localStorage.setItem(
+                    "theme",
+                    "light"
+                );
 
-/* ==========================
-   MOBILE MENU
-========================== */
+                themeBtn.innerHTML =
+                    '<i class="fa-solid fa-sun"></i>';
 
+                themeBtn.setAttribute(
+                    "aria-label",
+                    "Switch to dark mode"
+                );
 
-const menuBtn =
-document.querySelector(".mobile-nav-toggle");
+            } else {
 
+                localStorage.setItem(
+                    "theme",
+                    "dark"
+                );
 
-const navLinks =
-document.querySelector(".nav-links");
+                themeBtn.innerHTML =
+                    '<i class="fa-solid fa-moon"></i>';
 
+                themeBtn.setAttribute(
+                    "aria-label",
+                    "Switch to light mode"
+                );
 
+            }
 
-menuBtn.addEventListener(
-"click",
-()=>{
+        });
 
+    }
 
-navLinks.classList.toggle("show");
 
+    /* ==========================
+       MOBILE MENU
+    ========================== */
 
-if(navLinks.classList.contains("show")){
+    if (menuBtn && navLinks) {
 
-    menuBtn.innerHTML =
-    '<i class="fa-solid fa-xmark"></i>';
+        menuBtn.addEventListener("click", () => {
 
-}
-else{
+            const isOpen =
+                navLinks.classList.toggle("show");
 
-    menuBtn.innerHTML =
-    '<i class="fa-solid fa-bars"></i>';
 
-}
+            if (isOpen) {
 
+                menuBtn.innerHTML =
+                    '<i class="fa-solid fa-xmark"></i>';
 
-});
+                menuBtn.setAttribute(
+                    "aria-label",
+                    "Close navigation menu"
+                );
 
+                menuBtn.setAttribute(
+                    "aria-expanded",
+                    "true"
+                );
 
+            } else {
 
+                menuBtn.innerHTML =
+                    '<i class="fa-solid fa-bars"></i>';
 
+                menuBtn.setAttribute(
+                    "aria-label",
+                    "Open navigation menu"
+                );
 
+                menuBtn.setAttribute(
+                    "aria-expanded",
+                    "false"
+                );
 
+            }
 
-/* ==========================
-   TYPEWRITER EFFECT
-========================== */
+        });
 
 
-const typingElement =
-document.querySelector(".hero h2");
+        /* Close menu after clicking a link */
 
+        const mobileLinks =
+            navLinks.querySelectorAll("a");
 
 
-const roles = [
+        mobileLinks.forEach(link => {
 
-"Frontend Developer",
+            link.addEventListener("click", () => {
 
-"Full Stack Developer",
+                navLinks.classList.remove("show");
 
-"AI Application Developer",
+                menuBtn.innerHTML =
+                    '<i class="fa-solid fa-bars"></i>';
 
-"Software Engineer"
+                menuBtn.setAttribute(
+                    "aria-label",
+                    "Open navigation menu"
+                );
 
-];
+                menuBtn.setAttribute(
+                    "aria-expanded",
+                    "false"
+                );
 
+            });
 
-let roleIndex = 0;
+        });
 
-let charIndex = 0;
+    }
 
-let deleting = false;
 
+    /* ==========================
+       TYPEWRITER EFFECT
+    ========================== */
 
+    const roles = [
+        "Frontend Developer",
+        "Full Stack Developer",
+        "AI Application Developer",
+        "Software Engineer"
+    ];
 
-function typeWriter(){
+    let roleIndex = 0;
+    let charIndex = 0;
+    let deleting = false;
 
 
-if(!typingElement)
-return;
+    function typeWriter() {
 
+        if (!typingElement) {
+            return;
+        }
 
 
-let currentRole =
-roles[roleIndex];
+        const currentRole =
+            roles[roleIndex];
 
 
+        if (!deleting) {
 
-if(!deleting){
+            typingElement.textContent =
+                currentRole.substring(
+                    0,
+                    charIndex
+                );
 
+            charIndex++;
 
-typingElement.textContent =
-currentRole.substring(
-0,
-charIndex++
-);
 
+            if (charIndex > currentRole.length) {
 
+                deleting = true;
 
-if(charIndex >
-currentRole.length){
+                setTimeout(
+                    typeWriter,
+                    1400
+                );
 
+                return;
 
-deleting = true;
+            }
 
+        } else {
 
-setTimeout(
-typeWriter,
-1000
-);
+            typingElement.textContent =
+                currentRole.substring(
+                    0,
+                    charIndex
+                );
 
+            charIndex--;
 
-return;
 
-}
+            if (charIndex < 0) {
 
+                charIndex = 0;
 
+                deleting = false;
 
-}
+                roleIndex =
+                    (roleIndex + 1) %
+                    roles.length;
 
-else{
+            }
 
+        }
 
-typingElement.textContent =
-currentRole.substring(
-0,
-charIndex--
-);
 
+        setTimeout(
+            typeWriter,
+            deleting ? 55 : 90
+        );
 
+    }
 
-if(charIndex===0){
 
+    if (typingElement) {
+        typeWriter();
+    }
 
-deleting=false;
 
+    /* ==========================
+       NAVBAR SCROLL EFFECT
+    ========================== */
 
-roleIndex =
-(roleIndex+1)
-%
-roles.length;
+    function updateNavbar() {
 
+        if (!navbar) {
+            return;
+        }
 
-}
 
-}
+        if (window.scrollY > 40) {
 
+            navbar.classList.add("scrolled");
 
+        } else {
 
-setTimeout(
+            navbar.classList.remove("scrolled");
 
-typeWriter,
+        }
 
-deleting ? 50 : 100
+    }
 
-);
 
+    window.addEventListener(
+        "scroll",
+        updateNavbar
+    );
 
-}
 
+    updateNavbar();
 
 
-typeWriter();
+    /* ==========================
+       SCROLL REVEAL
+    ========================== */
 
+    const revealElements =
+        document.querySelectorAll(
+            ".glass-card"
+        );
 
 
+    if ("IntersectionObserver" in window) {
 
+        const observer =
+            new IntersectionObserver(
 
+                (entries) => {
 
+                    entries.forEach(entry => {
 
+                        if (entry.isIntersecting) {
 
-/* ==========================
-   NAVBAR SCROLL EFFECT
-========================== */
+                            entry.target.classList.add(
+                                "visible"
+                            );
 
+                            observer.unobserve(
+                                entry.target
+                            );
 
-const navbar =
-document.querySelector(".navbar");
+                        }
 
+                    });
 
+                },
 
-window.addEventListener(
-"scroll",
-()=>{
+                {
+                    threshold: 0.15
+                }
 
+            );
 
-if(window.scrollY > 40){
 
+        revealElements.forEach(card => {
 
-navbar.style.background =
-"rgba(0,0,0,0.75)";
+            card.classList.add(
+                "reveal"
+            );
 
+            observer.observe(card);
 
-}
-else{
+        });
 
+    } else {
 
-navbar.style.background =
-"var(--card)";
+        revealElements.forEach(card => {
 
+            card.classList.add(
+                "visible"
+            );
 
-}
+        });
 
+    }
 
-});
 
+    /* ==========================
+       ACTIVE NAVIGATION
+    ========================== */
 
+    const sections =
+        document.querySelectorAll(
+            "section"
+        );
 
 
+    const links =
+        document.querySelectorAll(
+            ".nav-links a"
+        );
 
 
+    function updateActiveNavigation() {
 
+        let current = "";
 
-/* ==========================
-   SCROLL REVEAL
-========================== */
 
+        sections.forEach(section => {
 
-const revealElements =
-document.querySelectorAll(
-".glass-card"
-);
+            const sectionTop =
+                section.offsetTop - 180;
 
+            const sectionBottom =
+                sectionTop +
+                section.offsetHeight;
 
 
-const observer =
-new IntersectionObserver(
+            if (
+                window.scrollY >= sectionTop &&
+                window.scrollY < sectionBottom
+            ) {
 
-(entries)=>{
+                current =
+                    section.getAttribute(
+                        "id"
+                    );
 
+            }
 
-entries.forEach(entry=>{
+        });
 
 
-if(entry.isIntersecting){
+        links.forEach(link => {
 
+            link.classList.remove(
+                "active"
+            );
 
-entry.target.style.opacity="1";
 
+            if (
+                link.getAttribute("href") ===
+                "#" + current
+            ) {
 
-entry.target.style.transform =
-"translateY(0)";
+                link.classList.add(
+                    "active"
+                );
 
+            }
 
-}
+        });
 
+    }
 
-});
 
+    window.addEventListener(
+        "scroll",
+        updateActiveNavigation
+    );
 
-},
 
-{
-threshold:0.15
-}
+    updateActiveNavigation();
 
-);
 
+    /* ==========================
+       FOOTER YEAR
+    ========================== */
 
+    if (footer) {
 
+        footer.innerHTML =
+            `© ${new Date().getFullYear()} Shraddha Ashoka. All Rights Reserved.`;
 
-revealElements.forEach(
-card=>{
-
-
-card.style.opacity="0";
-
-
-card.style.transform =
-"translateY(40px)";
-
-
-card.style.transition =
-"all .6s ease";
-
-
-
-observer.observe(card);
-
-
-
-});
-
-
-
-
-
-
-
-/* ==========================
-   ACTIVE NAVIGATION
-========================== */
-
-
-const sections =
-document.querySelectorAll("section");
-
-
-const links =
-document.querySelectorAll(
-".nav-links a"
-);
-
-
-
-window.addEventListener(
-"scroll",
-()=>{
-
-
-let current = "";
-
-
-
-sections.forEach(section=>{
-
-
-let sectionTop =
-section.offsetTop - 150;
-
-
-
-if(window.scrollY >= sectionTop){
-
-
-current =
-section.getAttribute("id");
-
-
-}
-
-
-
-});
-
-
-
-links.forEach(link=>{
-
-
-link.classList.remove(
-"active"
-);
-
-
-
-if(
-link.getAttribute("href")
-===
-"#"+current
-){
-
-link.classList.add(
-"active"
-);
-
-}
-
-
-});
-
-
-});
-
-
-
-
-
-
-
-/* ==========================
-   FOOTER YEAR
-========================== */
-
-
-const footer =
-document.querySelector("footer p");
-
-
-
-if(footer){
-
-
-footer.innerHTML =
-`© ${new Date().getFullYear()} Shraddha Ashoka. All Rights Reserved.`;
-
-}
-
-
+    }
 
 });
