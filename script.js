@@ -1,202 +1,169 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-    /* ==========================
-       ELEMENT REFERENCES
-    ========================== */
 
-    const body = document.body;
-    const themeBtn = document.getElementById("theme-toggle");
-    const menuBtn = document.querySelector(".mobile-nav-toggle");
-    const navLinks = document.querySelector(".nav-links");
-    const typingElement = document.querySelector(".hero h2");
-    const navbar = document.querySelector(".navbar");
-    const footer = document.querySelector("footer p");
-
-
-    /* ==========================
+    /* =====================================================
        THEME TOGGLE
-    ========================== */
+    ===================================================== */
 
-    const savedTheme = localStorage.getItem("theme");
+    const body =
+        document.body;
+
+    const themeBtn =
+        document.getElementById("theme-toggle");
+
+
+    const savedTheme =
+        localStorage.getItem("theme");
+
 
     if (savedTheme === "light") {
 
         body.classList.add("light-mode");
 
-        if (themeBtn) {
+        themeBtn.innerHTML =
+            '<i class="fa-solid fa-sun"></i>';
+
+    }
+
+
+    themeBtn.addEventListener("click", () => {
+
+        body.classList.toggle("light-mode");
+
+
+        if (
+            body.classList.contains("light-mode")
+        ) {
+
+            localStorage.setItem(
+                "theme",
+                "light"
+            );
+
+
             themeBtn.innerHTML =
                 '<i class="fa-solid fa-sun"></i>';
 
-            themeBtn.setAttribute(
-                "aria-label",
-                "Switch to dark mode"
+        } else {
+
+            localStorage.setItem(
+                "theme",
+                "dark"
             );
-        }
 
-    } else {
 
-        body.classList.remove("light-mode");
-
-        if (themeBtn) {
             themeBtn.innerHTML =
                 '<i class="fa-solid fa-moon"></i>';
 
-            themeBtn.setAttribute(
-                "aria-label",
-                "Switch to light mode"
-            );
         }
 
-    }
+    });
 
 
-    if (themeBtn) {
+    /* =====================================================
+       MOBILE NAVIGATION
+    ===================================================== */
 
-        themeBtn.addEventListener("click", () => {
-
-            body.classList.toggle("light-mode");
-
-            const isLightMode =
-                body.classList.contains("light-mode");
-
-
-            if (isLightMode) {
-
-                localStorage.setItem(
-                    "theme",
-                    "light"
-                );
-
-                themeBtn.innerHTML =
-                    '<i class="fa-solid fa-sun"></i>';
-
-                themeBtn.setAttribute(
-                    "aria-label",
-                    "Switch to dark mode"
-                );
-
-            } else {
-
-                localStorage.setItem(
-                    "theme",
-                    "dark"
-                );
-
-                themeBtn.innerHTML =
-                    '<i class="fa-solid fa-moon"></i>';
-
-                themeBtn.setAttribute(
-                    "aria-label",
-                    "Switch to light mode"
-                );
-
-            }
-
-        });
-
-    }
+    const menuBtn =
+        document.querySelector(
+            ".mobile-nav-toggle"
+        );
 
 
-    /* ==========================
-       MOBILE MENU
-    ========================== */
-
-    if (menuBtn && navLinks) {
-
-        menuBtn.addEventListener("click", () => {
-
-            const isOpen =
-                navLinks.classList.toggle("show");
+    const navLinks =
+        document.querySelector(
+            ".nav-links"
+        );
 
 
-            if (isOpen) {
+    menuBtn.addEventListener(
+        "click",
+        () => {
+
+            navLinks.classList.toggle(
+                "show"
+            );
+
+
+            if (
+                navLinks.classList.contains(
+                    "show"
+                )
+            ) {
 
                 menuBtn.innerHTML =
                     '<i class="fa-solid fa-xmark"></i>';
 
-                menuBtn.setAttribute(
-                    "aria-label",
-                    "Close navigation menu"
-                );
-
-                menuBtn.setAttribute(
-                    "aria-expanded",
-                    "true"
-                );
-
             } else {
 
                 menuBtn.innerHTML =
                     '<i class="fa-solid fa-bars"></i>';
 
-                menuBtn.setAttribute(
-                    "aria-label",
-                    "Open navigation menu"
-                );
-
-                menuBtn.setAttribute(
-                    "aria-expanded",
-                    "false"
-                );
-
             }
 
-        });
+        }
+    );
 
 
-        /* Close menu after clicking a link */
+    /* =====================================================
+       CLOSE MOBILE MENU AFTER CLICK
+    ===================================================== */
 
-        const mobileLinks =
-            navLinks.querySelectorAll("a");
+    document
+        .querySelectorAll(".nav-links a")
+        .forEach(link => {
+
+            link.addEventListener(
+                "click",
+                () => {
+
+                    navLinks.classList.remove(
+                        "show"
+                    );
 
 
-        mobileLinks.forEach(link => {
+                    menuBtn.innerHTML =
+                        '<i class="fa-solid fa-bars"></i>';
 
-            link.addEventListener("click", () => {
-
-                navLinks.classList.remove("show");
-
-                menuBtn.innerHTML =
-                    '<i class="fa-solid fa-bars"></i>';
-
-                menuBtn.setAttribute(
-                    "aria-label",
-                    "Open navigation menu"
-                );
-
-                menuBtn.setAttribute(
-                    "aria-expanded",
-                    "false"
-                );
-
-            });
+                }
+            );
 
         });
 
-    }
 
-
-    /* ==========================
+    /* =====================================================
        TYPEWRITER EFFECT
-    ========================== */
+    ===================================================== */
+
+    const typingElement =
+        document.querySelector(
+            ".hero h2"
+        );
+
 
     const roles = [
+
         "Frontend Developer",
+
         "Full Stack Developer",
+
         "AI Application Developer",
+
         "Software Engineer"
+
     ];
 
+
     let roleIndex = 0;
+
     let charIndex = 0;
+
     let deleting = false;
 
 
     function typeWriter() {
 
-        if (!typingElement) {
-            return;
-        }
+        if (!typingElement) return;
 
 
         const currentRole =
@@ -211,17 +178,23 @@ document.addEventListener("DOMContentLoaded", () => {
                     charIndex
                 );
 
+
             charIndex++;
 
 
-            if (charIndex > currentRole.length) {
+            if (
+                charIndex >
+                currentRole.length
+            ) {
 
                 deleting = true;
 
+
                 setTimeout(
                     typeWriter,
-                    1400
+                    1000
                 );
+
 
                 return;
 
@@ -235,6 +208,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     charIndex
                 );
 
+
             charIndex--;
 
 
@@ -244,8 +218,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 deleting = false;
 
+
                 roleIndex =
-                    (roleIndex + 1) %
+                    (
+                        roleIndex + 1
+                    ) %
                     roles.length;
 
             }
@@ -254,36 +231,46 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
         setTimeout(
+
             typeWriter,
-            deleting ? 55 : 90
+
+            deleting
+                ? 50
+                : 100
+
         );
 
     }
 
 
-    if (typingElement) {
-        typeWriter();
-    }
+    typeWriter();
 
 
-    /* ==========================
+    /* =====================================================
        NAVBAR SCROLL EFFECT
-    ========================== */
+    ===================================================== */
+
+    const navbar =
+        document.querySelector(
+            ".navbar"
+        );
+
 
     function updateNavbar() {
 
-        if (!navbar) {
-            return;
-        }
+        if (
+            window.scrollY > 40
+        ) {
 
-
-        if (window.scrollY > 40) {
-
-            navbar.classList.add("scrolled");
+            navbar.classList.add(
+                "scrolled"
+            );
 
         } else {
 
-            navbar.classList.remove("scrolled");
+            navbar.classList.remove(
+                "scrolled"
+            );
 
         }
 
@@ -299,38 +286,392 @@ document.addEventListener("DOMContentLoaded", () => {
     updateNavbar();
 
 
-    /* ==========================
-       SCROLL REVEAL
-    ========================== */
+    /* =====================================================
+       GITHUB PROJECTS
+    ===================================================== */
 
-    const revealElements =
-        document.querySelectorAll(
-            ".glass-card"
+    const projectsContainer =
+        document.getElementById(
+            "projects-container"
         );
 
 
-    if ("IntersectionObserver" in window) {
+    const projectCount =
+        document.getElementById(
+            "project-count"
+        );
+
+
+    const githubUsername =
+        "shraddhaA2";
+
+
+    /*
+        Repositories you DON'T want
+        displayed on your portfolio.
+    */
+
+    const excludedRepositories = [
+
+        "shraddha-portfolio",
+
+        "shraddhaA2"
+
+    ];
+
+
+    async function loadGitHubProjects() {
+
+        if (!projectsContainer) return;
+
+
+        try {
+
+
+            const response =
+                await fetch(
+
+                    `https://api.github.com/users/${githubUsername}/repos?sort=updated&direction=desc&per_page=100`
+
+                );
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    "GitHub API request failed"
+                );
+
+            }
+
+
+            const repositories =
+                await response.json();
+
+
+            /*
+                Only public repositories,
+                no forks,
+                excluding portfolio itself.
+            */
+
+            const projects =
+                repositories
+
+                    .filter(repo => {
+
+                        return (
+
+                            !repo.fork &&
+
+                            !excludedRepositories.includes(
+                                repo.name
+                            )
+
+                        );
+
+                    });
+
+
+            /*
+                Update project count.
+            */
+
+            if (projectCount) {
+
+                projectCount.textContent =
+                    `${projects.length}+`;
+
+            }
+
+
+            /*
+                No projects.
+            */
+
+            if (
+                projects.length === 0
+            ) {
+
+                projectsContainer.innerHTML = `
+
+                    <div class="projects-empty">
+
+                        <i class="fa-solid fa-folder-open"></i>
+
+                        <p>
+                            No public projects found.
+                        </p>
+
+                    </div>
+
+                `;
+
+                return;
+
+            }
+
+
+            /*
+                Generate project cards.
+            */
+
+            projectsContainer.innerHTML =
+                projects
+                    .map(repo => {
+
+
+                        const language =
+                            repo.language ||
+                            "Multiple Technologies";
+
+
+                        const description =
+                            repo.description ||
+                            "Software development project by Shraddha Ashoka.";
+
+
+                        const updatedDate =
+                            new Date(
+                                repo.updated_at
+                            ).toLocaleDateString(
+                                "en-IN",
+                                {
+                                    year: "numeric",
+                                    month: "short",
+                                    day: "numeric"
+                                }
+                            );
+
+
+                        const projectName =
+                            repo.name
+                                .replace(
+                                    /[-_]/g,
+                                    " "
+                                )
+                                .replace(
+                                    /\b\w/g,
+                                    letter =>
+                                        letter.toUpperCase()
+                                );
+
+
+                        return `
+
+                            <div
+                                class="glass-card project-card reveal"
+                            >
+
+
+                                <div class="project-top">
+
+
+                                    <i
+                                        class="fa-solid fa-code project-icon"
+                                    ></i>
+
+
+                                    <a
+                                        href="${repo.html_url}"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        class="project-external"
+                                        aria-label="Open GitHub repository"
+                                    >
+
+                                        <i
+                                            class="fa-solid fa-arrow-up-right-from-square"
+                                        ></i>
+
+                                    </a>
+
+
+                                </div>
+
+
+                                <h3>
+                                    ${projectName}
+                                </h3>
+
+
+                                <p>
+                                    ${description}
+                                </p>
+
+
+                                <div class="project-tags">
+
+
+                                    <span>
+                                        ${language}
+                                    </span>
+
+
+                                    <span>
+                                        GitHub
+                                    </span>
+
+
+                                </div>
+
+
+                                <div class="project-meta">
+
+
+                                    <span>
+
+                                        <i
+                                            class="fa-regular fa-star"
+                                        ></i>
+
+                                        ${repo.stargazers_count}
+
+                                    </span>
+
+
+                                    <span>
+
+                                        Updated
+                                        ${updatedDate}
+
+                                    </span>
+
+
+                                </div>
+
+
+                                <a
+                                    href="${repo.html_url}"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    class="project-link"
+                                >
+
+                                    View GitHub
+
+                                    <i
+                                        class="fa-solid fa-arrow-right"
+                                    ></i>
+
+                                </a>
+
+
+                            </div>
+
+                        `;
+
+                    })
+                    .join("");
+
+
+            /*
+                Add reveal animation to
+                dynamically generated cards.
+            */
+
+            initializeReveal();
+
+
+        }
+        catch (error) {
+
+
+            console.error(
+                "GitHub Projects Error:",
+                error
+            );
+
+
+            projectsContainer.innerHTML = `
+
+                <div class="projects-error">
+
+                    <i
+                        class="fa-solid fa-triangle-exclamation"
+                    ></i>
+
+                    <p>
+                        Unable to load GitHub projects.
+                    </p>
+
+                    <a
+                        href="https://github.com/shraddhaA2"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+                        View GitHub Profile
+                    </a>
+
+                </div>
+
+            `;
+
+        }
+
+    }
+
+
+    loadGitHubProjects();
+
+
+    /* =====================================================
+       SCROLL REVEAL
+    ===================================================== */
+
+    function initializeReveal() {
+
+
+        const revealElements =
+            document.querySelectorAll(
+                ".reveal"
+            );
+
+
+        if (
+            !("IntersectionObserver" in window)
+        ) {
+
+            revealElements.forEach(
+                element => {
+
+                    element.classList.add(
+                        "visible"
+                    );
+
+                }
+            );
+
+            return;
+
+        }
+
 
         const observer =
             new IntersectionObserver(
 
                 (entries) => {
 
-                    entries.forEach(entry => {
+                    entries.forEach(
+                        entry => {
 
-                        if (entry.isIntersecting) {
+                            if (
+                                entry.isIntersecting
+                            ) {
 
-                            entry.target.classList.add(
-                                "visible"
-                            );
+                                entry.target.classList.add(
+                                    "visible"
+                                );
 
-                            observer.unobserve(
-                                entry.target
-                            );
+
+                                observer.unobserve(
+                                    entry.target
+                                );
+
+                            }
 
                         }
-
-                    });
+                    );
 
                 },
 
@@ -341,32 +682,25 @@ document.addEventListener("DOMContentLoaded", () => {
             );
 
 
-        revealElements.forEach(card => {
+        revealElements.forEach(
+            element => {
 
-            card.classList.add(
-                "reveal"
-            );
+                observer.observe(
+                    element
+                );
 
-            observer.observe(card);
-
-        });
-
-    } else {
-
-        revealElements.forEach(card => {
-
-            card.classList.add(
-                "visible"
-            );
-
-        });
+            }
+        );
 
     }
 
 
-    /* ==========================
+    initializeReveal();
+
+
+    /* =====================================================
        ACTIVE NAVIGATION
-    ========================== */
+    ===================================================== */
 
     const sections =
         document.querySelectorAll(
@@ -382,53 +716,56 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function updateActiveNavigation() {
 
+
         let current = "";
 
 
-        sections.forEach(section => {
+        sections.forEach(
+            section => {
 
-            const sectionTop =
-                section.offsetTop - 180;
-
-            const sectionBottom =
-                sectionTop +
-                section.offsetHeight;
+                const sectionTop =
+                    section.offsetTop - 180;
 
 
-            if (
-                window.scrollY >= sectionTop &&
-                window.scrollY < sectionBottom
-            ) {
+                if (
+                    window.scrollY >=
+                    sectionTop
+                ) {
 
-                current =
-                    section.getAttribute(
-                        "id"
-                    );
+                    current =
+                        section.getAttribute(
+                            "id"
+                        );
+
+                }
 
             }
-
-        });
-
-
-        links.forEach(link => {
-
-            link.classList.remove(
-                "active"
-            );
+        );
 
 
-            if (
-                link.getAttribute("href") ===
-                "#" + current
-            ) {
+        links.forEach(
+            link => {
 
-                link.classList.add(
+                link.classList.remove(
                     "active"
                 );
 
-            }
 
-        });
+                if (
+                    link.getAttribute(
+                        "href"
+                    ) ===
+                    `#${current}`
+                ) {
+
+                    link.classList.add(
+                        "active"
+                    );
+
+                }
+
+            }
+        );
 
     }
 
@@ -442,9 +779,15 @@ document.addEventListener("DOMContentLoaded", () => {
     updateActiveNavigation();
 
 
-    /* ==========================
+    /* =====================================================
        FOOTER YEAR
-    ========================== */
+    ===================================================== */
+
+    const footer =
+        document.querySelector(
+            "footer p"
+        );
+
 
     if (footer) {
 
@@ -452,5 +795,6 @@ document.addEventListener("DOMContentLoaded", () => {
             `© ${new Date().getFullYear()} Shraddha Ashoka. All Rights Reserved.`;
 
     }
+
 
 });
